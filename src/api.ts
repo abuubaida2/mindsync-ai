@@ -7,7 +7,7 @@ import { PredictResponse } from './types';
 export const API_BASE =
   process.env.EXPO_PUBLIC_API_URL ??
   (Constants.expoConfig?.extra?.apiUrl as string | undefined) ??
-  'http://192.168.1.6:8000';
+  'https://unrealistic-lailah-godlessly.ngrok-free.dev';
 
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
@@ -17,10 +17,14 @@ async function handleResponse<T>(res: Response): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+const BASE_HEADERS: Record<string, string> = {
+  'bypass-tunnel-reminder': 'true',
+};
+
 /** Health check — returns true if backend is reachable. */
 export async function checkHealth(): Promise<boolean> {
   try {
-    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(4000) });
+    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(4000), headers: BASE_HEADERS });
     const data = await res.json();
     return data.status === 'ok';
   } catch {
@@ -32,7 +36,7 @@ export async function checkHealth(): Promise<boolean> {
 export async function predictText(text: string): Promise<PredictResponse> {
   const res = await fetch(`${API_BASE}/predict/text`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...BASE_HEADERS },
     body: JSON.stringify({ text }),
   });
   return handleResponse<PredictResponse>(res);
@@ -47,7 +51,7 @@ export async function predictAudio(audioUri: string): Promise<PredictResponse> {
   };
   const form = new FormData();
   form.append('audio', { uri: audioUri, name: `recording.${ext}`, type: mimeMap[ext] ?? 'audio/wav' } as any);
-  const res = await fetch(`${API_BASE}/predict/audio`, { method: 'POST', body: form });
+  const res = await fetch(`${API_BASE}/predict/audio`, { method: 'POST', body: form, headers: BASE_HEADERS });
   return handleResponse<PredictResponse>(res);
 }
 
@@ -78,6 +82,6 @@ export async function predictMultimodal(
     type: mimeType,
   } as any);
 
-  const res = await fetch(`${API_BASE}/predict`, { method: 'POST', body: form });
+  const res = await fetch(`${API_BASE}/predict`, { method: 'POST', body: form, headers: BASE_HEADERS });
   return handleResponse<PredictResponse>(res);
 }
