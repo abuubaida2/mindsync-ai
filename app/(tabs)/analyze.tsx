@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 import { Audio } from 'expo-av';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/colors';
-import { predictText, predictAudio, predictMultimodal } from '@/api';
+import { predictText, predictAudio, predictMultimodal, getApiBase } from '@/api';
 import { saveEntry } from '@/store';
 import { HistoryEntry } from '@/types';
 
@@ -124,7 +124,12 @@ export default function AnalyzeScreen() {
       await saveEntry(entry);
       router.push({ pathname: '/results', params: { data: JSON.stringify(result), text: entry.text } });
     } catch (err: any) {
-      Alert.alert('Analysis failed', err.message ?? 'Unknown error.\nMake sure the backend is running.');
+      Alert.alert(
+        'Analysis failed',
+        `${err.message ?? 'Unknown error.'}
+
+URL: ${getApiBase()}`,
+      );
     } finally {
       setLoading(false);
     }

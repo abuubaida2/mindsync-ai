@@ -12,9 +12,13 @@ export const API_BASE =
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(`API ${res.status}: ${body}`);
+    throw new Error(`API ${res.status}: ${body.substring(0, 200)}`);
   }
   return res.json() as Promise<T>;
+}
+
+export function getApiBase(): string {
+  return API_BASE;
 }
 
 const BASE_HEADERS: Record<string, string> = {
@@ -38,6 +42,7 @@ export async function predictText(text: string): Promise<PredictResponse> {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...BASE_HEADERS },
     body: JSON.stringify({ text }),
+    signal: AbortSignal.timeout(60000),
   });
   return handleResponse<PredictResponse>(res);
 }
@@ -51,7 +56,7 @@ export async function predictAudio(audioUri: string): Promise<PredictResponse> {
   };
   const form = new FormData();
   form.append('audio', { uri: audioUri, name: `recording.${ext}`, type: mimeMap[ext] ?? 'audio/wav' } as any);
-  const res = await fetch(`${API_BASE}/predict/audio`, { method: 'POST', body: form, headers: BASE_HEADERS });
+  const res = await fetch(`${API_BASE}/predict/audio`, { method: 'POST', body: form, headers: BASE_HEADERS, signal: AbortSignal.timeout(60000) });
   return handleResponse<PredictResponse>(res);
 }
 
@@ -82,6 +87,6 @@ export async function predictMultimodal(
     type: mimeType,
   } as any);
 
-  const res = await fetch(`${API_BASE}/predict`, { method: 'POST', body: form, headers: BASE_HEADERS });
+  const res = await fetch(`${API_BASE}/predict`, { method: 'POST', body: form, headers: BASE_HEADERS, signal: AbortSignal.timeout(60000) });
   return handleResponse<PredictResponse>(res);
 }

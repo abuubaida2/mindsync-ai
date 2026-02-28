@@ -68,3 +68,6 @@ backend/.env
 *.h5
 *.pkl
 *.bin
+
+# Research paper (local only, not for repository)
+RESEARCH_PAPER.md
