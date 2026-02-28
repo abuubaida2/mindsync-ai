@@ -39,3 +39,32 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Backend virtual environments
+backend/.venv/
+backend/.venv-1/
+backend/.venv-2/
+.venv/
+
+# Backend logs
+backend/*.log
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# Backend env
+backend/.env
+.env
+
+# Model weights (large files)
+*.pt
+*.pth
+*.h5
+*.pkl
+*.bin

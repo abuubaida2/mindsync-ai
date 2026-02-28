@@ -1,0 +1,33 @@
+# MindSync Text Stream Configuration
+# RoBERTa-Large fine-tuning on GoEmotions (Section 3.3.1)
+
+model:
+  name: "roberta-large"
+  hidden_size: 1024
+  num_classes: 4
+  dropout: 0.1
+  freeze_base: false
+
+data:
+  split: "train"
+  max_length: 128          # max tokens per paper Section 3.2.1
+  max_samples: null        # set integer for debugging
+
+training:
+  lr: 2.0e-5               # paper Section 3.3.1
+  weight_decay: 0.01
+  batch_size: 32           # paper Section 3.3.1
+  num_epochs: 5            # paper Section 3.3.1
+  warmup_ratio: 0.10       # 10% warm-up steps
+  grad_clip: 1.0
+  use_weighted_sampler: true
+
+evaluation:
+  batch_size: 64
+
+output:
+  checkpoint_dir: "checkpoints/text_only"
+  log_dir: "logs/text_only"
+
+seed: 42
+device: "auto"

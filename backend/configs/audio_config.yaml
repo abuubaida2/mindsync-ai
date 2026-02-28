@@ -1,0 +1,43 @@
+# MindSync Audio Stream Configuration
+# wav2vec 2.0 fine-tuning on RAVDESS + IEMOCAP (Section 3.3.2)
+
+model:
+  name: "facebook/wav2vec2-large-960h"
+  hidden_size: 768
+  num_classes: 4
+  dropout: 0.1
+  freeze_feature_encoder: true  # standard practice
+
+data:
+  sample_rate: 16000            # 16 kHz mono (Section 3.2.2)
+  max_length_sec: 10.0
+  n_mfcc: 40                    # T × 40 feature matrix
+  win_length_ms: 25.0           # 25 ms Hamming window
+  hop_length_ms: 10.0           # 10 ms hop
+
+  ravdess:
+    root_dir: "data/ravdess"
+    split_ratios: [0.80, 0.10, 0.10]
+
+  iemocap:
+    root_dir: "data/iemocap"
+    labels_csv: "data/iemocap/labels.csv"
+    split_ratios: [0.80, 0.10, 0.10]
+
+training:
+  lr: 1.0e-4                    # paper Section 3.3.2
+  weight_decay: 0.01
+  batch_size: 16                # paper Section 3.3.2
+  num_epochs: 10                # paper Section 3.3.2
+  warmup_ratio: 0.10
+  grad_clip: 1.0
+
+evaluation:
+  batch_size: 32
+
+output:
+  checkpoint_dir: "checkpoints/audio_only"
+  log_dir: "logs/audio_only"
+
+seed: 42
+device: "auto"

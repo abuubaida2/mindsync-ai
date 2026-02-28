@@ -1,0 +1,58 @@
+# MindSync Full Multimodal Configuration
+# CMAF + Incongruence Detection (Sections 3.3–3.6)
+
+model:
+  text_model_name: "roberta-large"
+  audio_model_name: "facebook/wav2vec2-large-960h"
+  d_model: 512               # CMAF shared projection dimension
+  num_heads: 8               # cross-attention heads
+  num_cmaf_layers: 2         # stacked CMAF blocks
+  num_classes: 4
+  dropout: 0.1
+  lambda_text: 0.3           # λ1 auxiliary text loss weight (Eq. 11)
+  lambda_audio: 0.3          # λ2 auxiliary audio loss weight (Eq. 11)
+  freeze_text_base: false
+  freeze_audio_encoder: true
+
+incongruence:
+  threshold: 0.5             # JSD threshold δ (Section 3.5)
+  temperature: 1.0           # softmax temperature
+
+data:
+  go_emotions_split: "train"
+  ravdess_root: "data/ravdess"
+  iemocap_root: "data/iemocap"
+  iemocap_labels_csv: "data/iemocap/labels.csv"
+  max_text_length: 128
+  audio_max_length_sec: 10.0
+  use_weighted_sampler: true
+
+training:
+  text_lr: 2.0e-5            # RoBERTa differential LR
+  audio_lr: 1.0e-4           # wav2vec differential LR
+  cmaf_lr: 1.0e-4            # CMAF + heads LR
+  weight_decay: 0.01
+  batch_size: 16
+  num_epochs: 10
+  warmup_ratio: 0.10
+  grad_clip: 1.0
+  log_interval: 50
+
+evaluation:
+  batch_size: 32
+
+wandb:
+  use_wandb: false
+  project: "mindsync"
+
+output:
+  checkpoint_dir: "checkpoints/mindsync_cmaf"
+  log_dir: "logs/mindsync_cmaf"
+  figures_dir: "docs/figures"
+
+hardware:
+  # Paper: NVIDIA A100 40GB, 64GB RAM, ~4.5h training runtime
+  num_workers: 4
+
+seed: 42
+device: "auto"
