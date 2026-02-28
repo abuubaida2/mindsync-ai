@@ -18,7 +18,7 @@ async function handleResponse<T>(res: Response): Promise<T> {
 }
 
 const BASE_HEADERS: Record<string, string> = {
-  'bypass-tunnel-reminder': 'true',
+  'ngrok-skip-browser-warning': 'skip',
 };
 
 /** Health check — returns true if backend is reachable. */
