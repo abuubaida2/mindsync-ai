@@ -1,6 +1,18 @@
 import Constants from 'expo-constants';
 import { PredictResponse } from './types';
 
+/** Creates an AbortSignal that times out after `ms` milliseconds.
+ *  Falls back to a manual AbortController for older Android WebViews
+ *  that don't support AbortSignal.timeout(). */
+function timeoutSignal(ms: number): AbortSignal {
+  if (typeof AbortSignal.timeout === 'function') {
+    return AbortSignal.timeout(ms);
+  }
+  const controller = new AbortController();
+  setTimeout(() => controller.abort(), ms);
+  return controller.signal;
+}
+
 // API base URL — set EXPO_PUBLIC_API_URL in your environment or update below.
 // Deployed backend:   "https://your-app.up.railway.app"
 // Same-LAN devices:   "http://192.168.1.6:8000"
@@ -28,7 +40,7 @@ const BASE_HEADERS: Record<string, string> = {
 /** Health check — returns true if backend is reachable. */
 export async function checkHealth(): Promise<boolean> {
   try {
-    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(4000), headers: BASE_HEADERS });
+    const res = await fetch(`${API_BASE}/health`, { signal: timeoutSignal(4000), headers: BASE_HEADERS });
     const data = await res.json();
     return data.status === 'ok';
   } catch {
@@ -42,7 +54,7 @@ export async function predictText(text: string): Promise<PredictResponse> {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...BASE_HEADERS },
     body: JSON.stringify({ text }),
-    signal: AbortSignal.timeout(60000),
+    signal: timeoutSignal(60000),
   });
   return handleResponse<PredictResponse>(res);
 }
@@ -56,7 +68,7 @@ export async function predictAudio(audioUri: string): Promise<PredictResponse> {
   };
   const form = new FormData();
   form.append('audio', { uri: audioUri, name: `recording.${ext}`, type: mimeMap[ext] ?? 'audio/wav' } as any);
-  const res = await fetch(`${API_BASE}/predict/audio`, { method: 'POST', body: form, headers: BASE_HEADERS, signal: AbortSignal.timeout(60000) });
+  const res = await fetch(`${API_BASE}/predict/audio`, { method: 'POST', body: form, headers: BASE_HEADERS, signal: timeoutSignal(60000) });
   return handleResponse<PredictResponse>(res);
 }
 
@@ -87,6 +99,6 @@ export async function predictMultimodal(
     type: mimeType,
   } as any);
 
-  const res = await fetch(`${API_BASE}/predict`, { method: 'POST', body: form, headers: BASE_HEADERS, signal: AbortSignal.timeout(60000) });
+  const res = await fetch(`${API_BASE}/predict`, { method: 'POST', body: form, headers: BASE_HEADERS, signal: timeoutSignal(60000) });
   return handleResponse<PredictResponse>(res);
 }

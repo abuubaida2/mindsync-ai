@@ -46,7 +46,7 @@
       ]
     ],
     "extra": {
-      "apiUrl": "http://192.168.1.7:8000",
+      "apiUrl": "https://unrealistic-lailah-godlessly.ngrok-free.dev",
       "eas": {
         "projectId": "a55c0288-fdf9-4e90-8ae2-b5a8756500fb"
       },
