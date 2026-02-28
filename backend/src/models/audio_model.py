@@ -4,7 +4,7 @@ Implements Section 3.3.2, Equation (5) of MindSync paper.
 
 Architecture:
     Raw waveform → CNN encoder (z_t) → Transformer context network (c_t)
-    → Mean pool → e_audio ∈ R^768
+    → Mean pool → e_audio ∈ R^1024
 
 Contrastive pre-training objective (Eq. 5):
     L_w2v = -log [ exp(sim(c_t, q_t) / κ) / Σ exp(sim(c_t, q̃) / κ) ]
@@ -36,12 +36,12 @@ class Wav2VecAudioEncoder(nn.Module):
                                 (standard wav2vec 2.0 fine-tuning practice).
     """
 
-    HIDDEN_SIZE = 768  # wav2vec 2.0 base / large-960h
+    HIDDEN_SIZE = 1024  # wav2vec 2.0 large-960h outputs 1024 dims
 
     def __init__(
         self,
         model_name: str = "facebook/wav2vec2-large-960h",
-        hidden_size: int = 768,
+        hidden_size: int = 1024,
         dropout: float = 0.1,
         freeze_feature_encoder: bool = True,
     ) -> None:
@@ -73,13 +73,13 @@ class Wav2VecAudioEncoder(nn.Module):
             input_values: (B, T_samples) raw waveform values, normalised.
 
         Returns:
-            e_audio: (B, 768) mean-pooled contextual representation.
+            e_audio: (B, 1024) mean-pooled contextual representation.
         """
         outputs = self.encoder(input_values=input_values)
-        # outputs.last_hidden_state: (B, T_frames, 768)
+        # outputs.last_hidden_state: (B, T_frames, 1024)
         # Mean pool over time dimension
-        hidden_states = outputs.last_hidden_state           # (B, T, 768)
-        e_audio = hidden_states.mean(dim=1)                 # (B, 768)
+        hidden_states = outputs.last_hidden_state           # (B, T, 1024)
+        e_audio = hidden_states.mean(dim=1)                 # (B, 1024)
         return self.dropout(e_audio)
 
 
@@ -88,14 +88,14 @@ class AudioClassificationHead(nn.Module):
     Classification head for audio stream.
 
     Args:
-        hidden_size: Input embedding dimension (768).
+        hidden_size: Input embedding dimension (1024 for wav2vec2-large).
         num_classes: Number of output classes (4 clusters).
         dropout: Dropout before linear projection.
     """
 
     def __init__(
         self,
-        hidden_size: int = 768,
+        hidden_size: int = 1024,
         num_classes: int = NUM_CLUSTERS,
         dropout: float = 0.1,
     ) -> None:
@@ -136,7 +136,7 @@ class MindSyncAudioModel(nn.Module):
         self,
         model_name: str = "facebook/wav2vec2-large-960h",
         num_classes: int = NUM_CLUSTERS,
-        hidden_size: int = 768,
+        hidden_size: int = 1024,
         dropout: float = 0.1,
         freeze_feature_encoder: bool = True,
     ) -> None:

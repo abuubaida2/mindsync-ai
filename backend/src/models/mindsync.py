@@ -90,7 +90,7 @@ class MindSync(nn.Module):
         # ── Cross-Modal Attention Fusion ─────────────────────────────────────
         self.cmaf = CMAFModule(
             text_dim=self.text_model.embedding_dim,    # 1024
-            audio_dim=self.audio_model.embedding_dim,  # 768
+            audio_dim=self.audio_model.embedding_dim,  # 1024
             d_model=d_model,
             num_heads=num_heads,
             num_layers=num_cmaf_layers,
@@ -127,7 +127,7 @@ class MindSync(nn.Module):
                 'logits_audio': (B, C) audio-only prediction logits
                 'embedding_fused': (B, d_model) fused embedding e_fused
                 'embedding_text': (B, 1024) e_text
-                'embedding_audio': (B, 768) e_audio
+                'embedding_audio': (B, 1024) e_audio
                 'incongruence_scores': (B,) JSD scores δ
                 'incongruence_flags': (B,) bool flags (True = incongruent)
                 'attn_weights': (B, 1, 1) CMAF text→audio attention weights
@@ -143,7 +143,7 @@ class MindSync(nn.Module):
 
         # ── Audio stream ─────────────────────────────────────────────────────
         audio_out = self.audio_model(input_values)
-        e_audio = audio_out["embedding"]        # (B, 768)
+        e_audio = audio_out["embedding"]        # (B, 1024)
         logits_audio = audio_out["logits"]      # (B, C)
 
         # ── CMAF fusion ──────────────────────────────────────────────────────
