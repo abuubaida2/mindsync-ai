@@ -14,12 +14,12 @@ function timeoutSignal(ms: number): AbortSignal {
 }
 
 // API base URL — set EXPO_PUBLIC_API_URL in your environment or update below.
-// Deployed backend:   "https://your-app.up.railway.app"
-// Same-LAN devices:   "http://192.168.1.6:8000"
+// Cloud backend (HF Space):  "https://ubaida1-mindsync-backend.hf.space"
+// Same-LAN devices:          "http://192.168.x.x:8000"
 export const API_BASE =
   process.env.EXPO_PUBLIC_API_URL ??
   (Constants.expoConfig?.extra?.apiUrl as string | undefined) ??
-  'https://unrealistic-lailah-godlessly.ngrok-free.dev';
+  'https://ubaida1-mindsync-backend.hf.space';
 
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
@@ -35,6 +35,7 @@ export function getApiBase(): string {
 
 const BASE_HEADERS: Record<string, string> = {
   'ngrok-skip-browser-warning': 'skip',
+  'bypass-tunnel-reminder': 'skip',
 };
 
 /** Health check — returns true if backend is reachable. */
@@ -70,6 +71,29 @@ export async function predictAudio(audioUri: string): Promise<PredictResponse> {
   form.append('audio', { uri: audioUri, name: `recording.${ext}`, type: mimeMap[ext] ?? 'audio/wav' } as any);
   const res = await fetch(`${API_BASE}/predict/audio`, { method: 'POST', body: form, headers: BASE_HEADERS, signal: timeoutSignal(60000) });
   return handleResponse<PredictResponse>(res);
+}
+
+export interface NarrativeResponse {
+  narrative: string;
+  model: string;
+}
+
+/** Generate empathetic clinical narrative for a prediction result. */
+export async function getNarrative(input: {
+  predicted_emotion: string;
+  text_emotion?: string;
+  audio_emotion?: string;
+  incongruence_score: number;
+  clinical_alert: boolean;
+  user_text?: string;
+}): Promise<NarrativeResponse> {
+  const res = await fetch(`${API_BASE}/narrative`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...BASE_HEADERS },
+    body: JSON.stringify(input),
+    signal: timeoutSignal(30000),
+  });
+  return handleResponse<NarrativeResponse>(res);
 }
 
 /** Multimodal prediction with optional audio file URI. */

@@ -1,0 +1,32 @@
+# Exclude everything not needed for the React Native APK build.
+# The RN app only needs: app/, src/, assets/, app.json, package*.json, tsconfig.json,
+# babel.config.js, eas.json. The Python backend, model checkpoints, datasets and
+# Kaggle/HF deployment dirs are huge and irrelevant to the mobile build.
+
+backend/
+checkpoints/
+kaggle/
+kaggle_output/
+kaggle_output_v11/
+hf-space/
+figures/
+
+*.pt
+*.pth
+*.bin
+*.h5
+*.pkl
+*.zip
+*.log
+
+RESEARCH_PAPER.md
+expo_qr.png
+generate_app_figure.py
+generate_architecture.py
+generate_contact_sheet.py
+generate_dataset_figure.py
+generate_figures.py
+=0.3.0
+=1.0.0
+.venv/
+__pycache__/

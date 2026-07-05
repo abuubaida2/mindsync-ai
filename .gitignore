@@ -71,3 +71,26 @@ backend/.env
 
 # Research paper (local only, not for repository)
 RESEARCH_PAPER.md
+
+# --- FYP personal documents (thesis, not code) ---
+*.docx
+*.pdf
+*.pptx
+*.mp4
+MindSync_Thesis*
+*_BACKUP*
+WhatsApp*
+gcuf logo.jpeg
+iphone_qr.png
+figures/
+GCUF_FYP*/
+
+# Thesis-generation scripts (document tooling, not app code)
+make_thesis_*.py
+make_ppt.py
+make_viva_prep.py
+thesis_generator.py
+generate_figures.py
+integrate_screenshots.py
+fix_appendix_order.py
+update_toc.py

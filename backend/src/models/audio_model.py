@@ -36,18 +36,19 @@ class Wav2VecAudioEncoder(nn.Module):
                                 (standard wav2vec 2.0 fine-tuning practice).
     """
 
-    HIDDEN_SIZE = 1024  # wav2vec 2.0 large-960h outputs 1024 dims
+    HIDDEN_SIZE = 1024  # wav2vec 2.0 large-960h outputs 1024 dims; overridden at construction
 
     def __init__(
         self,
         model_name: str = "facebook/wav2vec2-large-960h",
-        hidden_size: int = 1024,
+        hidden_size: int = None,
         dropout: float = 0.1,
         freeze_feature_encoder: bool = True,
     ) -> None:
         super().__init__()
-        self.hidden_size = hidden_size
         self.encoder = Wav2Vec2Model.from_pretrained(model_name)
+        self.hidden_size = self.encoder.config.hidden_size
+        self.HIDDEN_SIZE = self.hidden_size
 
         if freeze_feature_encoder:
             # Freeze CNN feature extractor (standard practice).
@@ -136,19 +137,18 @@ class MindSyncAudioModel(nn.Module):
         self,
         model_name: str = "facebook/wav2vec2-large-960h",
         num_classes: int = NUM_CLUSTERS,
-        hidden_size: int = 1024,
+        hidden_size: int = None,
         dropout: float = 0.1,
         freeze_feature_encoder: bool = True,
     ) -> None:
         super().__init__()
         self.encoder = Wav2VecAudioEncoder(
             model_name=model_name,
-            hidden_size=hidden_size,
             dropout=dropout,
             freeze_feature_encoder=freeze_feature_encoder,
         )
         self.classifier = AudioClassificationHead(
-            hidden_size=hidden_size,
+            hidden_size=self.encoder.hidden_size,
             num_classes=num_classes,
             dropout=dropout,
         )

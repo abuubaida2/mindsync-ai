@@ -1,0 +1,17 @@
+# Pin transformers==4.45.2 to match the Stage 1 training notebook.
+# RobertaTokenizerFast in transformers 5.x tokenizes RoBERTa-Large at character
+# level (e.g. "I am" -> "I","a","m" instead of "I","Ġam"), producing nonsense
+# inputs the model never saw during training -> it collapses to the majority
+# class (Ambiguity). 4.45.2 is the last known-good RoBERTa tokeniser.
+transformers==4.45.2
+torch>=2.0,<2.6
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+python-multipart>=0.0.6
+pydantic>=2.0.0
+huggingface_hub>=0.20.0
+groq>=0.11.0
+# Audio + multimodal stack (Stage 2 + Stage 3 deployment)
+librosa>=0.10.2
+soundfile>=0.12.1
+numpy<2.0

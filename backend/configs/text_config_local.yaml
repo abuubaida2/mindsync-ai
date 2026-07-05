@@ -1,0 +1,33 @@
+# MindSync Text-only training — LOCAL 4GB GPU config (Quadro T1000)
+# Uses roberta-base instead of roberta-large to fit in 4GB VRAM.
+
+model:
+  name: "roberta-base"
+  hidden_size: 768
+  num_classes: 4
+  dropout: 0.1
+  freeze_base: false
+
+data:
+  split: "train"
+  max_length: 96
+  max_samples: null
+
+training:
+  lr: 2.0e-5
+  weight_decay: 0.01
+  batch_size: 8
+  num_epochs: 3
+  warmup_ratio: 0.10
+  grad_clip: 1.0
+  use_weighted_sampler: true
+
+evaluation:
+  batch_size: 16
+
+output:
+  checkpoint_dir: "checkpoints/text_only_local"
+  log_dir: "logs/text_only_local"
+
+seed: 42
+device: "auto"
