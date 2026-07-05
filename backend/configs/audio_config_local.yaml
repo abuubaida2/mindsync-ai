@@ -1,0 +1,39 @@
+# MindSync Audio-only training — LOCAL 4GB GPU config (Quadro T1000)
+# Uses wav2vec2-base instead of wav2vec2-large to fit in 4GB VRAM.
+# IEMOCAP skipped (no academic license); RAVDESS only.
+
+model:
+  name: "facebook/wav2vec2-base-960h"
+  hidden_size: 768
+  num_classes: 4
+  dropout: 0.1
+  freeze_feature_encoder: true
+
+data:
+  sample_rate: 16000
+  max_length_sec: 6.0
+  n_mfcc: 40
+  win_length_ms: 25.0
+  hop_length_ms: 10.0
+
+  ravdess:
+    root_dir: "data/ravdess"
+    split_ratios: [0.80, 0.10, 0.10]
+
+training:
+  lr: 1.0e-4
+  weight_decay: 0.01
+  batch_size: 4
+  num_epochs: 5
+  warmup_ratio: 0.10
+  grad_clip: 1.0
+
+evaluation:
+  batch_size: 8
+
+output:
+  checkpoint_dir: "checkpoints/audio_only_local"
+  log_dir: "logs/audio_only_local"
+
+seed: 42
+device: "auto"

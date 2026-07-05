@@ -19,30 +19,31 @@ from src.data.emotion_clusters import NUM_CLUSTERS
 
 class RoBERTaTextEncoder(nn.Module):
     """
-    RoBERTa-Large text encoder.
+    RoBERTa text encoder (base or large).
 
-    Returns [CLS] token embedding e_text ∈ R^1024 from the final layer.
+    Returns [CLS] token embedding e_text from the final layer.
     Used as the text stream in MindSync CMAF pipeline.
 
     Args:
-        model_name: HuggingFace model identifier.
-        hidden_size: Embedding dimension (1024 for RoBERTa-Large).
+        model_name: HuggingFace model identifier (roberta-base or roberta-large).
+        hidden_size: Embedding dimension (auto-derived from the loaded model).
         dropout: Dropout rate on [CLS] embedding.
         freeze_base: Freeze base encoder weights (for ablation studies).
     """
 
-    HIDDEN_SIZE = 1024  # RoBERTa-Large
+    HIDDEN_SIZE = 1024  # default for RoBERTa-Large; overridden at construction
 
     def __init__(
         self,
         model_name: str = "roberta-large",
-        hidden_size: int = 1024,
+        hidden_size: int = None,
         dropout: float = 0.1,
         freeze_base: bool = False,
     ) -> None:
         super().__init__()
-        self.hidden_size = hidden_size
         self.encoder = RobertaModel.from_pretrained(model_name)
+        self.hidden_size = self.encoder.config.hidden_size
+        self.HIDDEN_SIZE = self.hidden_size
 
         if freeze_base:
             for param in self.encoder.parameters():
@@ -138,14 +139,14 @@ class MindSyncTextModel(nn.Module):
             freeze_base=freeze_base,
         )
         self.classifier = TextClassificationHead(
-            hidden_size=self.encoder.HIDDEN_SIZE,
+            hidden_size=self.encoder.hidden_size,
             num_classes=num_classes,
             dropout=dropout,
         )
 
     @property
     def embedding_dim(self) -> int:
-        return self.encoder.HIDDEN_SIZE
+        return self.encoder.hidden_size
 
     def forward(
         self,

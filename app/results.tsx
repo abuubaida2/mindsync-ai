@@ -1,10 +1,12 @@
+import { useEffect, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import {
-  View, Text, StyleSheet, ScrollView,
+  View, Text, StyleSheet, ScrollView, ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/colors';
 import { PredictResponse, EmotionCluster } from '@/types';
+import { getNarrative } from '@/api';
 
 const CLUSTER_COLORS: Record<EmotionCluster, string> = {
   Distress: Colors.Distress,
@@ -20,6 +22,26 @@ export default function ResultsScreen() {
   const jsd = result.incongruence_score ?? 0;
   const jsdPct = Math.round(jsd * 100);
   const gaugeColor = jsd > 0.5 ? Colors.alert : jsd > 0.3 ? Colors.warning : Colors.congruent;
+
+  const [narrative, setNarrative] = useState<string | null>(null);
+  const [narrativeErr, setNarrativeErr] = useState<string | null>(null);
+  const [narrativeLoading, setNarrativeLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    getNarrative({
+      predicted_emotion: result.predicted_emotion,
+      text_emotion: result.text_emotion,
+      audio_emotion: result.audio_emotion,
+      incongruence_score: jsd,
+      clinical_alert: result.clinical_alert,
+      user_text: text && text !== '[Voice recording]' ? text : undefined,
+    })
+      .then(r => { if (!cancelled) setNarrative(r.narrative); })
+      .catch(e => { if (!cancelled) setNarrativeErr(e?.message ?? 'Failed to load narrative'); })
+      .finally(() => { if (!cancelled) setNarrativeLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
 
   // Detect analysis mode from clinical_message prefix
   const msg = result.clinical_message ?? '';
@@ -62,33 +84,45 @@ export default function ResultsScreen() {
         </Text>
       </View>
 
-      {/* JSD gauge — only meaningful when both modalities present */}
-      <View style={styles.gaugeCard}>
-        <Text style={styles.sectionTitle}>Incongruence Score (δ)</Text>
-        {isBothMode ? (
-          <>
-            <Text style={[styles.jsdValue, { color: gaugeColor }]}>{jsd.toFixed(4)}</Text>
-            <View style={styles.gaugeTrack}>
-              <View style={[styles.gaugeFill, { width: `${jsdPct}%` as any, backgroundColor: gaugeColor }]} />
-            </View>
-            <View style={styles.gaugeLabels}>
-              <Text style={styles.gaugeLabel}>0 — Congruent</Text>
-              <Text style={[styles.gaugeLabel, { color: Colors.alert }]}>1 — Incongruent</Text>
-            </View>
-            <View style={styles.thresholdLine} />
-            <Text style={styles.thresholdText}>Threshold δ = 0.5</Text>
-          </>
+      {/* AI narrative (Gemini) */}
+      <View style={styles.narrativeCard}>
+        <View style={styles.narrativeHeader}>
+          <Ionicons name="sparkles" size={16} color={Colors.primary} />
+          <Text style={styles.narrativeTitle}>AI Wellness Note</Text>
+        </View>
+        {narrativeLoading ? (
+          <View style={styles.narrativeLoading}>
+            <ActivityIndicator size="small" color={Colors.primary} />
+            <Text style={styles.narrativeLoadingText}>Generating reflection…</Text>
+          </View>
+        ) : narrativeErr ? (
+          <Text style={styles.narrativeErr}>
+            Could not generate reflection: {narrativeErr}
+          </Text>
         ) : (
-          <>
-            <Text style={[styles.jsdValue, { color: Colors.textMuted }]}>N/A</Text>
-            <Text style={styles.naHint}>
-              {isTextOnly
-                ? 'Record a voice clip alongside the text to measure cross-modal incongruence.'
-                : 'Type the same utterance in text mode to measure cross-modal incongruence.'}
-            </Text>
-          </>
+          <Text style={styles.narrativeText}>{narrative}</Text>
         )}
+        <Text style={styles.narrativeDisclaimer}>
+          AI-generated, not a clinical assessment.
+        </Text>
       </View>
+
+      {/* JSD gauge — shown only when both modalities are present */}
+      {isBothMode && (
+        <View style={styles.gaugeCard}>
+          <Text style={styles.sectionTitle}>Incongruence Score (δ)</Text>
+          <Text style={[styles.jsdValue, { color: gaugeColor }]}>{jsd.toFixed(4)}</Text>
+          <View style={styles.gaugeTrack}>
+            <View style={[styles.gaugeFill, { width: `${jsdPct}%` as any, backgroundColor: gaugeColor }]} />
+          </View>
+          <View style={styles.gaugeLabels}>
+            <Text style={styles.gaugeLabel}>0 — Congruent</Text>
+            <Text style={[styles.gaugeLabel, { color: Colors.alert }]}>1 — Incongruent</Text>
+          </View>
+          <View style={styles.thresholdLine} />
+          <Text style={styles.thresholdText}>Threshold δ = 0.5</Text>
+        </View>
+      )}
 
       {/* Probability bars */}
       <ProbSection title={isBothMode ? 'Fused Probabilities' : 'Probabilities'} probs={result.fused_probabilities} />
@@ -149,6 +183,18 @@ const styles = StyleSheet.create({
   alertCardRed: { backgroundColor: Colors.alert + '15', borderColor: Colors.alert },
   alertCardGreen: { backgroundColor: Colors.congruent + '15', borderColor: Colors.congruent },
   alertText: { fontSize: 13, flex: 1, lineHeight: 19 },
+
+  narrativeCard: {
+    backgroundColor: Colors.bgCard, borderRadius: 14, padding: 16, marginBottom: 12,
+    borderWidth: 1, borderColor: Colors.primary + '55',
+  },
+  narrativeHeader: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 10 },
+  narrativeTitle: { color: Colors.primary, fontWeight: '700', fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 },
+  narrativeLoading: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 6 },
+  narrativeLoadingText: { color: Colors.textMuted, fontSize: 13 },
+  narrativeText: { color: Colors.textPrimary, fontSize: 14, lineHeight: 21 },
+  narrativeErr: { color: Colors.textMuted, fontSize: 12, fontStyle: 'italic', lineHeight: 18 },
+  narrativeDisclaimer: { color: Colors.textMuted, fontSize: 10, marginTop: 10, fontStyle: 'italic' },
 
   gaugeCard: { backgroundColor: Colors.bgCard, borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: Colors.border },
   sectionTitle: { color: Colors.textPrimary, fontWeight: '700', fontSize: 15, marginBottom: 10 },

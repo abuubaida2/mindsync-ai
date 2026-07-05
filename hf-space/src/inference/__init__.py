@@ -1,0 +1,1 @@
+from src.inference.text_predictor import TextOnlyPredictor
