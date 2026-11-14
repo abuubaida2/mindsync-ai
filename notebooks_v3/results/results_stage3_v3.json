@@ -1,0 +1,925 @@
+{
+ "audio_ckpt": {
+  "seed": 43,
+  "val_f1": 0.7314374940090607,
+  "test_acc": 0.6833333333333333,
+  "test_f1": 0.6717633896031955
+ },
+ "stage2_v3_report": {
+  "report": {
+   "Distress": {
+    "precision": 0.9615384615384616,
+    "recall": 0.5208333333333334,
+    "f1-score": 0.6756756756756757,
+    "support": 48.0
+   },
+   "Resilience": {
+    "precision": 0.7916666666666666,
+    "recall": 0.3958333333333333,
+    "f1-score": 0.5277777777777778,
+    "support": 48.0
+   },
+   "Aggression": {
+    "precision": 0.7818181818181819,
+    "recall": 0.8958333333333334,
+    "f1-score": 0.8349514563106796,
+    "support": 48.0
+   },
+   "Ambiguity": {
+    "precision": 0.48,
+    "recall": 1.0,
+    "f1-score": 0.6486486486486487,
+    "support": 36.0
+   },
+   "accuracy": 0.6833333333333333,
+   "macro avg": {
+    "precision": 0.7537558275058275,
+    "recall": 0.703125,
+    "f1-score": 0.6717633896031955,
+    "support": 180.0
+   },
+   "weighted avg": {
+    "precision": 0.7720062160062161,
+    "recall": 0.6833333333333333,
+    "f1-score": 0.6733043723334985,
+    "support": 180.0
+   }
+  },
+  "confusion": [
+   [
+    25,
+    5,
+    11,
+    7
+   ],
+   [
+    1,
+    19,
+    1,
+    27
+   ],
+   [
+    0,
+    0,
+    43,
+    5
+   ],
+   [
+    0,
+    0,
+    0,
+    36
+   ]
+  ],
+  "n": 180
+ },
+ "primary_protocol": "out_of_sample",
+ "train_stream_acc": {
+  "out_of_sample": {
+   "text": 0.7152073979377747,
+   "audio": 0.7711981534957886
+  },
+  "in_sample": {
+   "text": 0.9235000014305115,
+   "audio": 0.8928333520889282
+  }
+ },
+ "baselines": {
+  "text_only": {
+   "acc": 0.7075732448866777,
+   "f1": 0.6822052349748257
+  },
+  "audio_only": {
+   "acc": 0.7160493827160493,
+   "f1": 0.7118443319555573
+  },
+  "late_fusion_avg": {
+   "acc": 0.8098396904367053,
+   "f1": 0.7910905278666498
+  }
+ },
+ "fusion": {
+  "out_of_sample": {
+   "pooled_full": {
+    "runs": [
+     {
+      "seed": 42,
+      "val_f1": 0.8042449429302997,
+      "acc": 0.7488483508384006,
+      "f1": 0.7718201602817206
+     },
+     {
+      "seed": 43,
+      "val_f1": 0.8476315223399637,
+      "acc": 0.7810945273631841,
+      "f1": 0.814466583931831
+     },
+     {
+      "seed": 44,
+      "val_f1": 0.806576894586365,
+      "acc": 0.8096554265708494,
+      "f1": 0.8128216895633892
+     },
+     {
+      "seed": 45,
+      "val_f1": 0.8686073378906634,
+      "acc": 0.8330569375345495,
+      "f1": 0.8448672947220998
+     },
+     {
+      "seed": 46,
+      "val_f1": 0.8217429028789567,
+      "acc": 0.7713285424728211,
+      "f1": 0.7968762269724411
+     }
+    ],
+    "acc_mean": 0.788796756955961,
+    "acc_std": 0.03299388463115055,
+    "f1_mean": 0.8081703910942963,
+    "f1_std": 0.0267246926123727,
+    "params": 1186572
+   },
+   "pooled_concat": {
+    "runs": [
+     {
+      "seed": 42,
+      "val_f1": 0.8261072848961117,
+      "acc": 0.7639579878385848,
+      "f1": 0.7949431272059363
+     },
+     {
+      "seed": 43,
+      "val_f1": 0.8707837249428885,
+      "acc": 0.8323198820711258,
+      "f1": 0.8575063579542257
+     },
+     {
+      "seed": 44,
+      "val_f1": 0.8294373933537256,
+      "acc": 0.7549290584116455,
+      "f1": 0.7957141622747784
+     },
+     {
+      "seed": 45,
+      "val_f1": 0.8323357123241801,
+      "acc": 0.7534549474847982,
+      "f1": 0.7977164442821659
+     },
+     {
+      "seed": 46,
+      "val_f1": 0.8208034901874336,
+      "acc": 0.8087341072415699,
+      "f1": 0.8397593919206019
+     }
+    ],
+    "acc_mean": 0.7826791966095449,
+    "acc_std": 0.035768934097524026,
+    "f1_mean": 0.8171278967275416,
+    "f1_std": 0.029453867376321007,
+    "params": 659212
+   },
+   "seq_full": {
+    "runs": [
+     {
+      "seed": 42,
+      "val_f1": 0.807914549218897,
+      "acc": 0.8240280081076101,
+      "f1": 0.8380984171430561
+     },
+     {
+      "seed": 43,
+      "val_f1": 0.8380392849890685,
+      "acc": 0.8341625207296849,
+      "f1": 0.8434912743112408
+     },
+     {
+      "seed": 44,
+      "val_f1": 0.8070862519351781,
+      "acc": 0.7952828450340889,
+      "f1": 0.8229457982122546
+     },
+     {
+      "seed": 45,
+      "val_f1": 0.8186060306732679,
+      "acc": 0.8360051593882439,
+      "f1": 0.8498038100161069
+     },
+     {
+      "seed": 46,
+      "val_f1": 0.7697930607740077,
+      "acc": 0.8161046618758061,
+      "f1": 0.8250428869410422
+     }
+    ],
+    "acc_mean": 0.8211166390270869,
+    "acc_std": 0.016529095293628577,
+    "f1_mean": 0.8358764373247402,
+    "f1_std": 0.011634666824856605,
+    "params": 1186572
+   },
+   "seq_no_aux": {
+    "runs": [
+     {
+      "seed": 42,
+      "val_f1": 0.8308924939809632,
+      "acc": 0.8384005896443707,
+      "f1": 0.8501041861211391
+     },
+     {
+      "seed": 43,
+      "val_f1": 0.8429837366409094,
+      "acc": 0.8411645476322093,
+      "f1": 0.8485884378125605
+     },
+     {
+      "seed": 44,
+      "val_f1": 0.799432745272082,
+      "acc": 0.7903077206559793,
+      "f1": 0.8216810491165605
+     },
+     {
+      "seed": 45,
+      "val_f1": 0.8246696100200476,
+      "acc": 0.8433757140224802,
+      "f1": 0.8532568532687124
+     },
+     {
+      "seed": 46,
+      "val_f1": 0.7731203203701411,
+      "acc": 0.7962041643633684,
+      "f1": 0.8148222170033307
+     }
+    ],
+    "acc_mean": 0.8218905472636816,
+    "acc_std": 0.026281867243906167,
+    "f1_mean": 0.8376905486644606,
+    "f1_std": 0.017989141798319116,
+    "params": 1186572
+   },
+   "seq_d128": {
+    "runs": [
+     {
+      "seed": 42,
+      "val_f1": 0.8039052818765933,
+      "acc": 0.8004422332780542,
+      "f1": 0.8220929133615408
+     },
+     {
+      "seed": 43,
+      "val_f1": 0.8130313992675204,
+      "acc": 0.800810761009766,
+      "f1": 0.8237959035033942
+     },
+     {
+      "seed": 44,
+      "val_f1": 0.821819407938428,
+      "acc": 0.824212271973466,
+      "f1": 0.834849425069203
+     },
+     {
+      "seed": 45,
+      "val_f1": 0.810905387724832,
+      "acc": 0.7895706651925557,
+      "f1": 0.8221599740418286
+     },
+     {
+      "seed": 46,
+      "val_f1": 0.7994078639993233,
+      "acc": 0.8214483139856275,
+      "f1": 0.8424980141511724
+     }
+    ],
+    "acc_mean": 0.8072968490878939,
+    "acc_std": 0.014913652990620765,
+    "f1_mean": 0.8290792460254279,
+    "f1_std": 0.009191805879265057,
+    "params": 429452
+   }
+  },
+  "in_sample": {
+   "pooled_full": {
+    "runs": [
+     {
+      "seed": 42,
+      "val_f1": 0.8312465934304897,
+      "acc": 0.8382163257785148,
+      "f1": 0.8491401593976313
+     },
+     {
+      "seed": 43,
+      "val_f1": 0.8336799176014058,
+      "acc": 0.824212271973466,
+      "f1": 0.8372653390322762
+     },
+     {
+      "seed": 44,
+      "val_f1": 0.8262750048176185,
+      "acc": 0.82808181315644,
+      "f1": 0.8382573048770324
+     },
+     {
+      "seed": 45,
+      "val_f1": 0.8292050424872187,
+      "acc": 0.8313985627418463,
+      "f1": 0.8374824293628391
+     },
+     {
+      "seed": 46,
+      "val_f1": 0.8278549486468364,
+      "acc": 0.8371107425833794,
+      "f1": 0.8481475616300712
+     }
+    ],
+    "acc_mean": 0.8318039432467292,
+    "acc_std": 0.005935756637057405,
+    "f1_mean": 0.8420585588599699,
+    "f1_std": 0.006033043805642651,
+    "params": 1186572
+   },
+   "pooled_concat": {
+    "runs": [
+     {
+      "seed": 42,
+      "val_f1": 0.8427330918245417,
+      "acc": 0.8151833425465266,
+      "f1": 0.8381811824678871
+     },
+     {
+      "seed": 43,
+      "val_f1": 0.8418770097342796,
+      "acc": 0.8282660770222959,
+      "f1": 0.8416909830329771
+     },
+     {
+      "seed": 44,
+      "val_f1": 0.8251835601944958,
+      "acc": 0.8181315644002212,
+      "f1": 0.8316447984856679
+     },
+     {
+      "seed": 45,
+      "val_f1": 0.8401894758964907,
+      "acc": 0.8459554081444629,
+      "f1": 0.8509142880204964
+     },
+     {
+      "seed": 46,
+      "val_f1": 0.844002515473698,
+      "acc": 0.843744241754192,
+      "f1": 0.8496120750654592
+     }
+    ],
+    "acc_mean": 0.8302561267735398,
+    "acc_std": 0.014199919158271,
+    "f1_mean": 0.8424086654144975,
+    "f1_std": 0.00803869140223437,
+    "params": 659212
+   },
+   "seq_full": {
+    "runs": [
+     {
+      "seed": 42,
+      "val_f1": 0.8158911484345233,
+      "acc": 0.78127879122904,
+      "f1": 0.7964319226760521
+     },
+     {
+      "seed": 43,
+      "val_f1": 0.8217612695245375,
+      "acc": 0.8039432467293164,
+      "f1": 0.8102466360824713
+     },
+     {
+      "seed": 44,
+      "val_f1": 0.8140934273875049,
+      "acc": 0.7904919845218352,
+      "f1": 0.8126877195687731
+     },
+     {
+      "seed": 45,
+      "val_f1": 0.8148476801837916,
+      "acc": 0.8238437442417542,
+      "f1": 0.8257629206021236
+     },
+     {
+      "seed": 46,
+      "val_f1": 0.8129382473513284,
+      "acc": 0.8161046618758061,
+      "f1": 0.8304738316798892
+     }
+    ],
+    "acc_mean": 0.8031324857195503,
+    "acc_std": 0.017573112634301943,
+    "f1_mean": 0.8151206061218618,
+    "f1_std": 0.013490012994760364,
+    "params": 1186572
+   }
+  }
+ },
+ "significance": {
+  "n_test_clips": 179,
+  "n_test_pairs": 5427,
+  "bootstrap_resamples": 5000,
+  "acc_ci95_cluster": {
+   "text_only": [
+    0.6884235016072024,
+    0.7264764622178275
+   ],
+   "audio_only": [
+    0.6330369698556362,
+    0.7930225090376916
+   ],
+   "late_fusion": [
+    0.7848023076604812,
+    0.8346544803052434
+   ],
+   "out_of_sample/pooled_full": [
+    0.6983122249458851,
+    0.7973795022063452
+   ],
+   "out_of_sample/pooled_concat": [
+    0.7148368738306979,
+    0.8115147699525473
+   ],
+   "out_of_sample/seq_full": [
+    0.7716025597682106,
+    0.8744573744776393
+   ],
+   "out_of_sample/seq_no_aux": [
+    0.7884446326190924,
+    0.8864090890447479
+   ],
+   "out_of_sample/seq_d128": [
+    0.7524740089967649,
+    0.8461858142704065
+   ],
+   "in_sample/pooled_full": [
+    0.7882303872223078,
+    0.8835248118228165
+   ],
+   "in_sample/pooled_concat": [
+    0.7600586812454747,
+    0.8663330323889985
+   ],
+   "in_sample/seq_full": [
+    0.7219183545413111,
+    0.8368326169548123
+   ]
+  },
+  "differences": {
+   "out_of_sample/seq_full - late_fusion": {
+    "acc_diff": 0.014188317670904782,
+    "ci95_cluster": [
+     -0.026319006854212117,
+     0.052819970734051085
+    ],
+    "p_two_sided_cluster": 0.4864,
+    "first_only_correct": 492,
+    "second_only_correct": 415,
+    "p_value_pair_level_optimistic": 0.011576868638410428
+   },
+   "out_of_sample/pooled_full - late_fusion": {
+    "acc_diff": -0.06099133959830472,
+    "ci95_cluster": [
+     -0.09773126312296736,
+     -0.02491189890362656
+    ],
+    "p_two_sided_cluster": 0.0016,
+    "first_only_correct": 318,
+    "second_only_correct": 649,
+    "p_value_pair_level_optimistic": 8.315725909644229e-27
+   },
+   "out_of_sample/seq_full - out_of_sample/pooled_full": {
+    "acc_diff": 0.0751796572692095,
+    "ci95_cluster": [
+     0.05096381375660022,
+     0.10007333263803116
+    ],
+    "p_two_sided_cluster": 0.0,
+    "first_only_correct": 526,
+    "second_only_correct": 118,
+    "p_value_pair_level_optimistic": 2.2800761714453403e-62
+   },
+   "out_of_sample/seq_full - text_only": {
+    "acc_diff": 0.1164547632209324,
+    "ci95_cluster": [
+     0.055995105498698614,
+     0.17530412335223797
+    ],
+    "p_two_sided_cluster": 0.0,
+    "first_only_correct": 1161,
+    "second_only_correct": 529,
+    "p_value_pair_level_optimistic": 1.9688806584759654e-54
+   },
+   "out_of_sample/pooled_full - out_of_sample/pooled_concat": {
+    "acc_diff": -0.015109637000184195,
+    "ci95_cluster": [
+     -0.022362417379110714,
+     -0.008125674638783765
+    ],
+    "p_two_sided_cluster": 0.0,
+    "first_only_correct": 39,
+    "second_only_correct": 121,
+    "p_value_pair_level_optimistic": 5.7036690149663934e-11
+   },
+   "out_of_sample/seq_full - out_of_sample/pooled_concat": {
+    "acc_diff": 0.060070020269025304,
+    "ci95_cluster": [
+     0.03443346002959053,
+     0.08632621458736855
+    ],
+    "p_two_sided_cluster": 0.0,
+    "first_only_correct": 473,
+    "second_only_correct": 147,
+    "p_value_pair_level_optimistic": 7.52533252413159e-41
+   }
+  }
+ },
+ "per_class_seed42": {
+  "seq_full": {
+   "Distress": {
+    "precision": 0.8925233644859814,
+    "recall": 0.764,
+    "f1-score": 0.8232758620689655,
+    "support": 250.0
+   },
+   "Resilience": {
+    "precision": 0.9641509433962264,
+    "recall": 0.6717791411042945,
+    "f1-score": 0.7918388429752066,
+    "support": 2282.0
+   },
+   "Aggression": {
+    "precision": 0.9062870699881376,
+    "recall": 0.9351285189718482,
+    "f1-score": 0.9204819277108434,
+    "support": 817.0
+   },
+   "Ambiguity": {
+    "precision": 0.7136690647482015,
+    "recall": 0.9547641963426372,
+    "f1-score": 0.8167970358172087,
+    "support": 2078.0
+   },
+   "accuracy": 0.8240280081076101,
+   "macro avg": {
+    "precision": 0.8691576106546367,
+    "recall": 0.831417964104695,
+    "f1-score": 0.8380984171430561,
+    "support": 5427.0
+   },
+   "weighted avg": {
+    "precision": 0.8562307253876461,
+    "recall": 0.8240280081076101,
+    "f1-score": 0.8222099098128951,
+    "support": 5427.0
+   }
+  },
+  "pooled_full": {
+   "Distress": {
+    "precision": 0.8975609756097561,
+    "recall": 0.736,
+    "f1-score": 0.8087912087912088,
+    "support": 250.0
+   },
+   "Resilience": {
+    "precision": 0.9790535298681148,
+    "recall": 0.5530236634531113,
+    "f1-score": 0.7068048165779893,
+    "support": 2282.0
+   },
+   "Aggression": {
+    "precision": 0.7325800376647834,
+    "recall": 0.9522643818849449,
+    "f1-score": 0.8281000532197977,
+    "support": 817.0
+   },
+   "Ambiguity": {
+    "precision": 0.640891675374434,
+    "recall": 0.8854667949951877,
+    "f1-score": 0.7435845625378864,
+    "support": 2078.0
+   },
+   "accuracy": 0.7488483508384006,
+   "macro avg": {
+    "precision": 0.8125215546292721,
+    "recall": 0.781688710083311,
+    "f1-score": 0.7718201602817206,
+    "support": 5427.0
+   },
+   "weighted avg": {
+    "precision": 0.8087122150841494,
+    "recall": 0.7488483508384006,
+    "f1-score": 0.7438461135181641,
+    "support": 5427.0
+   }
+  }
+ },
+ "confusion_seed42": {
+  "seq_full": [
+   [
+    191,
+    11,
+    24,
+    24
+   ],
+   [
+    19,
+    1533,
+    4,
+    726
+   ],
+   [
+    4,
+    3,
+    764,
+    46
+   ],
+   [
+    0,
+    43,
+    51,
+    1984
+   ]
+  ],
+  "pooled_full": [
+   [
+    184,
+    12,
+    15,
+    39
+   ],
+   [
+    14,
+    1262,
+    44,
+    962
+   ],
+   [
+    7,
+    2,
+    778,
+    30
+   ],
+   [
+    0,
+    13,
+    225,
+    1840
+   ]
+  ]
+ },
+ "ece": {
+  "text_only": 0.206234932747464,
+  "audio_only": 0.18583059707431315,
+  "late_fusion_avg": 0.08452841155906718,
+  "out_of_sample/seq_full": 0.0792205091969861,
+  "out_of_sample/pooled_full": 0.12087840990121229
+ },
+ "jsd": {
+  "standalone": {
+   "cong_mean": 0.35977068543434143,
+   "cong_std": 0.35332897305488586,
+   "cong_median": 0.18694955110549927,
+   "incong_mean": 0.664954423904419,
+   "incong_std": 0.3289594054222107,
+   "incong_median": 0.8257828950881958,
+   "ratio": 1.8482729196548462,
+   "roc_auc": 0.7430082524203774,
+   "tau_val": 0.345392644405365,
+   "detect@tau": 0.7873594988022848,
+   "false_alarm@tau": 0.4389165284687673,
+   "detect@0.5": 0.7254468398747006,
+   "false_alarm@0.5": 0.3714759535655058
+  },
+  "aux": {
+   "cong_mean": 0.02952791564166546,
+   "cong_std": 0.03996577113866806,
+   "cong_median": 0.011458080261945724,
+   "incong_mean": 0.043977562338113785,
+   "incong_std": 0.043464429676532745,
+   "incong_median": 0.029939306899905205,
+   "ratio": 1.489355444908142,
+   "roc_auc": 0.6440651603477606,
+   "tau_val": 0.007691234350204468,
+   "detect@tau": 0.8116823290952644,
+   "false_alarm@tau": 0.5922240648608808,
+   "detect@0.5": 0.0,
+   "false_alarm@0.5": 0.0
+  },
+  "alert_deployed_tau0.5": {
+   "detect": 0.8149990786806707,
+   "false_alarm": 0.4818500092131933
+  },
+  "alert_calibrated": {
+   "tau": 0.345392644405365,
+   "detect": 0.8159203980099502,
+   "false_alarm": 0.4842454394693201
+  },
+  "mismatch_only": {
+   "detect": 0.8149990786806707,
+   "false_alarm": 0.4818500092131933
+  }
+ },
+ "attention": {
+  "mean_normalised_entropy": 0.9816408157348633,
+  "mean_max_weight": 0.024295521900057793,
+  "uniform_max_weight_ref": 0.011642765253782272
+ },
+ "error_analysis": {
+  "n_errors": 955,
+  "errors_text_correct": 529,
+  "errors_audio_correct": 204,
+  "errors_both_wrong": 254,
+  "fixed_vs_text": 1161,
+  "broken_vs_text": 529,
+  "examples": [
+   {
+    "text": "Surely hope so, buddy. Surely hope so.",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "Yeah, sure, but it's beatable. It's made to be beaten, not otherwise. That's what I meant with my speech.",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "I've been really into reading nonfiction lately and ancient religious history sounds fascinating! Do you have any books you recommend?",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "Still awesome. I skateboard, ride bikes, and hang out with my friends. Edit: I'm 40",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "I thought V had great gameplay, but the big character switch that no one asked for really held it back.",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "I've always wanted one of those but like worry it'll make a huge mess in my washer",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "Same.. If I'm particularly stressed out someone just walking down the same road as me feels like they're invading my space.",
+    "true": "Resilience",
+    "seq_cmaf": "Distress",
+    "text_only": "Aggression",
+    "audio_only": "Distress"
+   },
+   {
+    "text": "Can't wait to see her looks in S11!",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "Not pay for the child he helped create? Wow... great advice.",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "This whole episode is one of my favorites; it has this AND \"Requiem for a Tuesday\" AND \"the Low-Cal Calzone Zone\" ",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "[NAME] might actually be able to pick her up and carry her without huffing and puffing now? 😳😓",
+    "true": "Ambiguity",
+    "seq_cmaf": "Resilience",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "She likes sending nudes? I mean, just go with the flow and see what happens. ",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "This is amazing, man. Kick some ass, make good food, get paid. Congratulations",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "I know right. It feels really good when someone acknowledges your existence. I hope more moments like these come for you.",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "Well how’d the planters pull this off? Step by step.",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Ambiguity",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "Going to the doctor tomorrow for a checkup to make sure everything is normal and hopefully this shit is just in my head.",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Resilience"
+   },
+   {
+    "text": "Found the militant long time Southwest employee? ...and if not, I am constantly amazed at what random people will get mad about these days.",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "iS thIs a MeTapHor FoR LifE?",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Ambiguity",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "I have more faith in [NAME] than anyone on the court to make a 3. Strange world",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Resilience"
+   },
+   {
+    "text": "not writing some stats today [NAME]? just curious xD",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "I literally cried out IS THAT MATT BERRY?!?!?!?!?!",
+    "true": "Distress",
+    "seq_cmaf": "Resilience",
+    "text_only": "Resilience",
+    "audio_only": "Resilience"
+   },
+   {
+    "text": "If it's true i'm sad he's leaving but I wish him nothing but the best.",
+    "true": "Distress",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Ambiguity",
+    "audio_only": "Aggression"
+   },
+   {
+    "text": "That’s better:-) now go get em tiger",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "Interesting read, but horrible format on mobile.",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Resilience",
+    "audio_only": "Ambiguity"
+   },
+   {
+    "text": "No thanks.",
+    "true": "Resilience",
+    "seq_cmaf": "Ambiguity",
+    "text_only": "Aggression",
+    "audio_only": "Ambiguity"
+   }
+  ]
+ },
+ "n_pairs": {
+  "out_of_sample": {
+   "train": 4340,
+   "val": 1086
+  },
+  "in_sample": {
+   "train": 6000,
+   "val": 5426
+  },
+  "test": 5427
+ }
+}
