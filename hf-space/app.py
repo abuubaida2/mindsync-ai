@@ -1,15 +1,16 @@
 """
 MindSync Backend — Hugging Face Space (FastAPI, port 7860).
 
-Full multimodal deployment: loads Stage 1 (text RoBERTa-Large), Stage 2 (audio
-wav2vec2-Large), and Stage 3 (CMAF + JSD fusion) checkpoints from HF Model repos.
+Multimodal deployment (paper version): loads Stage 1 (text RoBERTa-Large) and Stage 2 v3
+(audio wav2vec2-Large, layer-weighted padding-free pooling) checkpoints from HF Model repos.
+The fused prediction is late fusion (mean of the two posteriors); incongruence = JSD + mismatch.
 
 Endpoints:
     GET  /health
     GET  /clusters
     POST /predict/text       — text-only (Stage 1 classifier)
-    POST /predict/audio      — voice-only (Stage 2 classifier)
-    POST /predict            — multimodal (text + audio → CMAF fusion + JSD)
+    POST /predict/audio      — voice-only (Stage 2 v3 classifier)
+    POST /predict            — multimodal (text + audio → late fusion + JSD)
     POST /narrative          — Groq llama-3.3 reflection (requires GROQ_API_KEY)
 """
 
@@ -35,14 +36,12 @@ from huggingface_hub import hf_hub_download
 
 TEXT_REPO   = os.getenv("MINDSYNC_TEXT_REPO",   "Ubaida1/mindsync-text-model")
 AUDIO_REPO  = os.getenv("MINDSYNC_AUDIO_REPO",  "Ubaida1/mindsync-audio-model")
-FUSION_REPO = os.getenv("MINDSYNC_FUSION_REPO", "Ubaida1/mindsync-fusion-model")
+AUDIO_FILE  = os.getenv("MINDSYNC_AUDIO_FILE",  "audio_v3_best.pt")   # Stage 2 v3 (paper version)
 
 print(f"Downloading text checkpoint from {TEXT_REPO} ...")
 TEXT_CKPT = hf_hub_download(repo_id=TEXT_REPO, filename="best_text_model.pt")
-print(f"Downloading audio checkpoint from {AUDIO_REPO} ...")
-AUDIO_CKPT = hf_hub_download(repo_id=AUDIO_REPO, filename="best_audio_model.pt")
-print(f"Downloading fusion checkpoint from {FUSION_REPO} ...")
-FUSION_CKPT = hf_hub_download(repo_id=FUSION_REPO, filename="best_fusion_model.pt")
+print(f"Downloading audio checkpoint {AUDIO_FILE} from {AUDIO_REPO} ...")
+AUDIO_CKPT = hf_hub_download(repo_id=AUDIO_REPO, filename=AUDIO_FILE)
 print("Checkpoints ready.")
 
 # ── App ─────────────────────────────────────────────────────────────────────────
@@ -60,15 +59,14 @@ def load_model():
     global predictor, PREDICTOR_MODE
     text_name = os.getenv("MINDSYNC_TEXT_MODEL", "roberta-large")
     audio_name = os.getenv("MINDSYNC_AUDIO_MODEL", "facebook/wav2vec2-large-960h")
-    print(f"Loading multimodal predictor ({text_name} + {audio_name} + CMAF) ...")
+    print(f"Loading multimodal predictor ({text_name} + {audio_name} v3, late fusion) ...")
     predictor = MultimodalPredictor(
         text_ckpt=TEXT_CKPT,
         audio_ckpt=AUDIO_CKPT,
-        fusion_ckpt=FUSION_CKPT,
         text_model_name=text_name,
         audio_model_name=audio_name,
     )
-    PREDICTOR_MODE = f"multimodal ({text_name} + wav2vec2 + CMAF)"
+    PREDICTOR_MODE = f"multimodal ({text_name} + wav2vec2 v3, late fusion + JSD)"
     print("Model ready.")
 
 
