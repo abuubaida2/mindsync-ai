@@ -354,3 +354,4 @@ print('===== SUMMARY START ====='); print(json.dumps(CV, indent=1, default=_json
 
 build([0, 1, 2, 3], 'a')
 build([4, 5, 6, 7], 'b')
+build(list(range(8)), 'all')
