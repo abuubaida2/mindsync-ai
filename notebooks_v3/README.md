@@ -12,6 +12,7 @@ All runs used a single NVIDIA Tesla T4 on Kaggle; each notebook installs `transf
 | `stage1_multiseed/` | Two further Stage 1 runs (seeds 43, 44) → `results/stage1_multiseed_results.json` |
 | `stage2_v3_audio/` | Stage 2 v3 audio model (wav2vec2-Large-960h, layer-weighted padding-free pooling), seeds 42–44 on the speaker-independent split → `results/stage2_v3_results.json` and the checkpoint used downstream |
 | `cv_all/` | Eight-fold speaker-independent cross-validation of the audio model (all 24 RAVDESS actors) and the RAVDESS same-utterance incongruence test (real transcript + its own clip) → `results/cv_results_all.json` |
+| `adapted/` | Encoders fine-tuned on MELD (text: 3 seeds; audio: 1 seed), late fusion and a concatenation head; MUStARD with dialogue context, frozen vs adapted encoders → `results/results_adapted.json` |
 | `real_pairs/` | MELD (real text + audio of the same utterance): zero-shot transfer and fusion trained on MELD; MUStARD (real sarcasm) incongruence test → `results/results_real_pairs.json`. Needs the Stage 2 v3 checkpoint attached as an input. |
 
 Datasets: GoEmotions, RAVDESS, MELD (`zaber666/meld-dataset` on Kaggle), MUStARD labels from the official repository and
@@ -20,6 +21,8 @@ the official transcript are excluded (`1_5617`, `1_7089`, `2_235`).
 
 `audio_model_v3.py` holds the audio model class pasted verbatim into the notebooks; `build_real.py` and `build_cv.py`
 regenerate the notebooks (`KAGGLE_USER=<your username> python build_real.py`).
+
+Live deployment check and latency: `results/latency_hf_space.json` (180 multimodal + 50 text-only requests to the Hugging Face Space).
 
 ## Not used in the paper
 
